@@ -31,10 +31,18 @@ class ViewController: UIViewController,UISearchBarDelegate{
     
     // MARK: - Life Cycle
     
+    //override func viewDidLoad() {
+        //super.viewDidLoad()
+    //}
     override func viewDidLoad() {
         super.viewDidLoad()
+        // 背景をタップしたらdismissKeyboardメソッドを呼ぶように設定する
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+        
+  
     }
-    
+
     /**
      * 入力画面から戻ってきた時に TableView を更新させる
      */
@@ -158,15 +166,28 @@ class ViewController: UIViewController,UISearchBarDelegate{
         
         searchFlag = true
         if let search = searchBar.text{
+            if search.characters.count > 0{
             category = try! Realm().objects(Task).filter("category = '\(search)'")
+         tableview.reloadData()
+            
+            }
         }
+        
+        
         //let searchText = searchbar.text
         // searchText を元にリアルムの検索をかける
         // taskArrayの中身を入れ替える (検索した結果)
         
         
         // テーブルビュー 更新
-        tableview.reloadData()
+       
     }
+
+    func dismissKeyboard(){
+        // キーボードを閉じる
+        view.endEditing(true)
+    }
+    
+
 }
 
